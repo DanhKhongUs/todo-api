@@ -13,13 +13,13 @@ export const sendForgotPasswordCode = async (
   try {
     const { email } = req.body;
     const existingUser = await User.findOne({ email });
-    if (!existingUser) return next(new AppError("User does not exists!", 401));
+    if (!existingUser) return next(new AppError("User does not exists!", 404));
 
     //Chỉ nên cho người dùng đã xác minh email dùng tính năng này
     // (để tránh việc hacker gửi mã bậy vào email chưa xác thực )
     if (!existingUser.verified)
       return next(
-        new AppError("Please verify your email before resetting password!", 401)
+        new AppError("Please verify your email before resetting password!", 403)
       );
 
     const fromEmail = process.env.NODE_CODE_SENDING_EMAIL_ADDRESS;
@@ -43,8 +43,9 @@ export const sendForgotPasswordCode = async (
       existingUser.forgotPasswordCodeValidation = Date.now();
       await existingUser.save();
       res.status(200).json({ success: true, message: "Code sent!" });
+      return;
     }
-    return next(new AppError("Code sent failed!", 401));
+    return next(new AppError("Code sent failed!", 500));
   } catch (error) {
     next(error);
   }

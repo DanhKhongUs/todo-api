@@ -45,7 +45,7 @@ export const signin = async (
 
     // Gửi token dưới dạng cookie HTTP-only
     res
-      .cookie("Authorization", "Bearer " + token, {
+      .cookie("Authorization", `Bearer ${token}`, {
         path: "/",
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
@@ -60,6 +60,7 @@ export const signin = async (
           _id: existingUser._id,
           name: existingUser.name,
           email: existingUser.email,
+          verify: existingUser.verified,
         },
         message: "Logged in successfully!",
       });

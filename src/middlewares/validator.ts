@@ -58,7 +58,9 @@ export const acceptFPCodeSchema = Joi.object({
     .required()
     .email({ tlds: { allow: false } }),
   providedCode: Joi.number().integer().required(),
-  newPassword: Joi.string()
-    .required()
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/),
+  newPassword: Joi.string().min(6).required(),
+  confirmPassword: Joi.any().valid(Joi.ref("newPassword")).required().messages({
+    "any.only": "Passwords do not match",
+    "any.required": '"confirmPassword" is required',
+  }),
 });

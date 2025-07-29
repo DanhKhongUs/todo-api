@@ -16,8 +16,10 @@ export const validate = async (
 ) => {
   try {
     const token = req.cookies["Authorization"];
-    if (!token) {
-      return next(new AppError("Not logged in", 401));
+    if (!token || !token.startsWith("Bearer ")) {
+      return next(
+        new AppError("Authentication token missing or invalid.", 401)
+      );
     }
 
     const secret = process.env.TOKEN_SECRET;
@@ -41,6 +43,7 @@ export const validate = async (
         _id: user._id,
         name: user.name,
         email: user.email,
+        verified: user.verified,
       },
     });
   } catch (error) {

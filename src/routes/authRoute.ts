@@ -9,11 +9,15 @@ import { identifier } from "middlewares/identifier";
 import { signout } from "controllers/auth/signout";
 import { sendForgotPasswordCode } from "controllers/auth/sendForgotPasswordCode";
 import { validate } from "controllers/auth/validate";
+import { CheckForgotPasswordCode } from "controllers/auth/checkForgotPasswordCode";
+import { resetPasswordWithCode } from "controllers/auth/resetPasswordWithCode";
 const router = express.Router();
 
+router.get("/validate", identifier, (req, res, next) => {
+  Promise.resolve(validate(req, res, next)).catch(next);
+});
 router.post("/signup", signup);
 router.post("/signin", signin);
-router.get("/validate", identifier, validate);
 router.post("/signout", identifier, signout);
 
 router.patch("/send-verification-code", identifier, sendVerificationCode);
@@ -22,5 +26,9 @@ router.patch("/verify-verification-code", identifier, verifyVerificationCode);
 
 router.patch("/change-password", identifier, changePassword);
 
-router.patch("/send-forgot-password-code", identifier, sendForgotPasswordCode);
+router.patch("/send-forgot-password-code", sendForgotPasswordCode);
+
+router.patch("/check-forgot-password-code", CheckForgotPasswordCode);
+
+router.patch("/reset-password-with-code", resetPasswordWithCode);
 export default router;
