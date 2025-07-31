@@ -31,4 +31,5 @@ router.patch("/send-forgot-password-code", sendForgotPasswordCode);
 router.patch("/check-forgot-password-code", CheckForgotPasswordCode);
 
 router.patch("/reset-password-with-code", resetPasswordWithCode);
+
 export default router;

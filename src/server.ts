@@ -7,6 +7,7 @@ import cookieParser from "cookie-parser";
 
 import connectDB from "./config/db";
 import authRouter from "./routes/authRoute";
+import todoRouter from "./routes/todoRoute";
 
 dotenv.config();
 
@@ -32,8 +33,10 @@ app.use(
 
 app.use("/api/auth", authRouter);
 
+app.use("/api/todo", todoRouter);
+
 connectDB()
-  .then(() => {
+  .then(async () => {
     app.listen(PORT, () => {
       console.log(`Server is running on http:localhost:${PORT}`);
     });
